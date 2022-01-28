@@ -1,57 +1,79 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 import Article from './Article';
 import EditForm from './EditForm';
+
+import axiosWithAuth from '../utils/axiosWithAuth'
 
 const View = (props) => {
     const [articles, setArticles] = useState([]);
     const [editing, setEditing] = useState(false);
     const [editId, setEditId] = useState();
 
-    const handleDelete = (id) => {
-    }
+    const { push } = useHistory();
 
-    const handleEdit = (article) => {
-    }
+    useEffect(() => {
+        axiosWithAuth().get('/articles')
+            .then(res => {
+                setArticles(res.data)
+            })
+            .catch(err => {
+                console.error(err)
+            })
+    }, [])
 
-    const handleEditSelect = (id)=> {
-        setEditing(true);
-        setEditId(id);
-    }
+const handleDelete = (id) => {
+    axiosWithAuth().delete(`/articles/${id}`)
+        .then(res => {
+            setArticles(res.data)
+        })
+        .catch(err => {
+            console.error(err)
+        })
+}
 
-    const handleEditCancel = ()=>{
-        setEditing(false);
-    }
+const handleEdit = (article) => {
+    axiosWithAuth().put(`/articles/${editId}`, article)
+    .then(res => {
+        push('/view');
+    })
+    .catch(err => {
+        console.error(err)
+    })
+}    
 
-    return(<ComponentContainer>
-        <HeaderContainer>View Articles</HeaderContainer>
-        <ContentContainer flexDirection="row">
-            <ArticleContainer>
-                {
-                    articles.map(article => {
-                        return <ArticleDivider key={article.id}>
-                            <Article key={article.id} article={article} handleDelete={handleDelete} handleEditSelect={handleEditSelect}/>
-                        </ArticleDivider>
-                    })
-                }
-            </ArticleContainer>
-            
+const handleEditSelect = (id)=> {
+    setEditing(true);
+    setEditId(id);
+}
+
+const handleEditCancel = ()=>{
+    setEditing(false);
+}
+
+return(<ComponentContainer>
+    <HeaderContainer>View Articles</HeaderContainer>
+    <ContentContainer flexDirection="row">
+        <ArticleContainer>
             {
-                editing && <EditForm editId={editId} handleEdit={handleEdit} handleEditCancel={handleEditCancel}/>
+                articles.map(article => {
+                    return <ArticleDivider key={article.id}>
+                        <Article key={article.id} article={article} handleDelete={handleDelete} handleEditSelect={handleEditSelect}/>
+                    </ArticleDivider>
+                })
             }
-        </ContentContainer>
-    </ComponentContainer>);
+        </ArticleContainer>
+        
+        {
+            editing && <EditForm editId={editId} handleEdit={handleEdit} handleEditCancel={handleEditCancel}/>
+        }
+    </ContentContainer>
+</ComponentContainer>);
 }
 
 export default View;
-
-//Task List:
-//1. Build and import axiosWithAuth module in the utils.
-//2. When the component mounts, make an http request that adds all articles to state.
-//3. Complete handleDelete method. It should make a request that delete the article with the included id.
-//4. Complete handleEdit method. It should make a request that updates the article that matches the included article param.
-
 
 const Container = styled.div`
     padding: 0.5em;
