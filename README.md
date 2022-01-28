@@ -53,10 +53,10 @@ In this project, you will demonstrate your mastery of these skills by creating *
 
 ### Basic Routing
 > *Build the needed utilities to restrict access to private routes.*
-* [ ] Build a `Route` component that renders rendering `Login.js` to the path `/`.
-* [ ] Build a `Route` component that renders rendering `Login.js` to the path `/login`.
-* [ ] Build a `Route` component that renders rendering `View.js` to the path `/view`.
-* [ ] Build a `Route` component that renders rendering `Logout.js` to the path `/logout`.
+* [X] Build a `Route` component that renders rendering `Login.js` to the path `/`.
+* [X] Build a `Route` component that renders rendering `Login.js` to the path `/login`.
+* [X] Build a `Route` component that renders rendering `View.js` to the path `/view`.
+* [X] Build a `Route` component that renders rendering `Logout.js` to the path `/logout`.
 
 ### Login Authentication
 > *Build a login form to authenticate your users along with all the components and utilities needed to support authentication.*
